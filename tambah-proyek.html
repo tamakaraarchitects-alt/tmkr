@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Tambah Proyek — TAMAKARA</title>
+<style>
+:root{--bg:#E7E6E1;--ink:#111;--mut:#6a6865;--line:rgba(17,17,17,.2);--r:#E2001A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:400 15px/1.6 'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);padding:clamp(1rem,4vw,3rem)}
+main{max-width:860px;margin:0 auto}
+h1{font:300 clamp(2rem,5vw,3.4rem)/1.05 'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;letter-spacing:-.04em;margin-bottom:.4rem}
+h1::after{content:'';display:block;width:48px;height:3px;background:var(--r);margin:1rem 0 1.2rem}
+p.lead{color:var(--mut);max-width:62ch;margin-bottom:2rem}
+ol{margin:0 0 2rem 1.2rem;color:var(--mut)}ol li{margin-bottom:.3rem}
+label{display:grid;gap:.4rem;font:600 11px/1.4 'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1.2rem}
+input,select,textarea{font:400 15px 'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;letter-spacing:0;text-transform:none;background:transparent;border:0;border-bottom:1px solid var(--ink);padding:.6rem 0;color:var(--ink);width:100%;border-radius:0}
+textarea{min-height:90px;resize:vertical;border:1px solid var(--line);padding:.7rem}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--r)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+@media(max-width:640px){.row{grid-template-columns:1fr}}
+button{font:600 11px 'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:.9rem 1.5rem;cursor:pointer}
+button:hover{background:var(--r);border-color:var(--r)}
+button.g{background:transparent;color:var(--ink)}button.g:hover{color:#fff}
+.acts{display:flex;gap:.8rem;flex-wrap:wrap;margin:.6rem 0 2rem}
+#thumbs{display:flex;gap:6px;flex-wrap:wrap;margin:.4rem 0 1.2rem}
+#thumbs figure{width:92px;font-size:10px;color:var(--mut);cursor:pointer;border:2px solid transparent}
+#thumbs figure.cv{border-color:var(--r)}
+#thumbs img{width:100%;height:64px;object-fit:cover;display:block}
+#out{font:13px/1.5 ui-monospace,Menlo,monospace;min-height:260px;background:#111;color:#e8e8e8;border:0;padding:1rem}
+.note{font-size:13px;color:var(--mut);margin-top:.6rem}
+.warn{color:var(--r)}
+</style>
+</head>
+<body>
+<main>
+<h1>Tambah proyek baru</h1>
+<p class="lead">Halaman ini membantu menulis data proyek baru untuk <b>js/projects.js</b>. Tidak ada yang dikirim ke internet: semua diproses di browsermu.</p>
+<ol>
+ <li>Isi data proyek di bawah, lalu klik <b>Buat kode</b> → <b>Salin</b>.</li>
+ <li>Buka <b>js/projects.js</b>, tempel <u>tepat sebelum tanda <code>];</code></u> di paling bawah.</li>
+ <li>Buat folder foto: <b>img/FOTO FIX/&lt;nama folder&gt;/</b> (nama persis seperti yang muncul di hasil kode), isi dengan <code>1.png</code> (sampul), <code>2.png</code>, <code>3.png</code>, dst.</li>
+ <li>Simpan dan upload ulang. Jumlah foto dihitung otomatis oleh web.</li>
+</ol>
+
+<div class="row">
+ <label>Judul proyek<input id="t" placeholder="Contoh: Umah Meno, Gili Meno" autocomplete="off"></label>
+ <label>Lokasi<input id="loc" placeholder="Contoh: Gili Meno, Lombok" autocomplete="off"></label>
+</div>
+<div class="row">
+ <label>Kategori<select id="c"><option value="residensial">Residensial</option><option value="hospitality">Hospitality</option><option value="komersial">Komersial</option></select></label>
+ <label>Lingkup<select id="s"><option value="AI">Arsitektur &amp; Interior</option><option value="A">Arsitektur</option><option value="I">Interior</option><option value="M">Masterplan &amp; Arsitektur</option></select></label>
+</div>
+<p class="note" id="fnote">Nama folder foto: <b id="fname">(isi judul dulu)</b></p>
+<br>
+<label>Video pendek (opsional, boleh lebih dari satu)<input id="vf" type="file" accept="video/*" multiple></label>
+<p class="note" id="vnote">Video tidak diproses di sini. Kompres dulu (lihat README, bagian Video), lalu beri nama sesuai daftar yang muncul dan taruh di folder <b>video/</b>.</p>
+<br>
+<label>Deskripsi (Indonesia)<textarea id="di" placeholder="1–2 kalimat tentang proyek ini"></textarea></label>
+<label>Deskripsi (English)<textarea id="de" placeholder="1–2 sentences about this project"></textarea></label>
+
+<div class="acts"><button id="mk" type="button">Buat kode</button><button id="cp" class="g" type="button">Salin</button></div>
+<label>Kode untuk js/projects.js<textarea id="out" readonly spellcheck="false" placeholder="Hasilnya muncul di sini"></textarea></label>
+<p class="note">Id dibuat otomatis dari judul dan harus unik. Foto: format .png huruf kecil, 1600–2000 px, di bawah 400 KB.</p>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s);
+const fold=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\\/:*?"<>|]/g,' ').replace(/\s+/g,' ').trim().replace(/^\.+|\.+$/g,'');
+const slug=t=>t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,28)||'proyek';
+const id=()=>slug($('#t').value);
+let vids=[];
+function vnames(){const pid=id();return vids.map((_,i)=>`${pid}_v${i+1}`)}
+function drawV(){const n=vnames();$('#vnote').innerHTML=vids.length?'Simpan di folder <b>video/</b> dengan nama: '+n.map((x,i)=>`<code>${x}.mp4</code> (asli: ${vids[i].name})`).join(', ')+'. Poster opsional: <code>nama.jpg</code> di folder yang sama.':'Video tidak diproses di sini. Kompres dulu (lihat README, bagian Video), lalu beri nama sesuai daftar yang muncul dan taruh di folder <b>video/</b>.'}
+$('#vf').onchange=e=>{vids=[...e.target.files];drawV()};
+$('#t').oninput=()=>{$('#fname').textContent=fold($('#t').value)||'(isi judul dulu)';drawV()};
+function toJpg(file,max=1800){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?res({blob:b,c,x}):rej(new Error('gagal')),'image/jpeg',.86)};im.onerror=()=>rej(new Error('gambar tidak terbaca'));im.src=URL.createObjectURL(file)})}
+const q=s=>JSON.stringify(s);
+$('#mk').onclick=()=>{
+ const t=$('#t').value.trim();if(!t)return alert('Isi judul proyek.');
+ const pid=id();
+ const lines=[`  "id": ${q(pid)}`,`  "f": ${q(fold(t))}`,`  "t": ${q(t)}`,`  "loc": ${q($('#loc').value.trim())}`,`  "c": ${q($('#c').value)}`,`  "s": ${q($('#s').value)}`,`  "k": "#d9d8d3"`];
+ if(vids.length)lines.push(`  "v": [${vnames().map(q).join(', ')}]`);
+ lines.push(`  "d": [\n   ${q($('#di').value.trim())},\n   ${q($('#de').value.trim()||$('#di').value.trim())}\n  ]`);
+ $('#out').value=`,\n {\n${lines.join(',\n')}\n }\n`;$('#out').select();
+};
+$('#cp').onclick=async()=>{const v=$('#out').value;if(!v)return alert('Klik "Buat kode" dulu.');try{await navigator.clipboard.writeText(v);$('#cp').textContent='Tersalin ✓'}catch(e){$('#out').select();document.execCommand('copy');$('#cp').textContent='Tersalin ✓'}setTimeout(()=>$('#cp').textContent='Salin',1800)};
+</script>
+</body>
+</html>
